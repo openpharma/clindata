@@ -1,0 +1,331 @@
+---
+name: Pkgdown Docs 📚
+
+on:
+  push:
+    tags:
+      - "v*"
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+    branches:
+      - main
+    paths:
+      - inst/templates/**
+      - _pkgdown.yaml
+      - DESCRIPTION
+      - "**.md"
+      - "**.Rmd"
+      - man/**
+      - LICENSE.*
+      - NAMESPACE
+  workflow_dispatch:
+  workflow_call:
+    secrets:
+      REPO_GITHUB_TOKEN:
+        description: |
+          Github token with read access to repositories, required for staged.dependencies installation
+        required: false
+    inputs:
+      install-system-dependencies:
+        description: Check for and install system dependencies
+        required: false
+        default: false
+        type: boolean
+      fail-pkgdown-on-warnings:
+        description: Fail the pkgdown workflow if warnings are generated while generating docs
+        required: false
+        default: false
+        type: boolean
+      enable-staged-dependencies-check:
+        description: Enable staged dependencies YAML check
+        required: false
+        default: false
+        type: boolean
+      additional-env-vars:
+        description: |
+          Extra environment variables, as a 'key=value' pair, with each pair on a new line.
+          Example usage:
+          additional-env-vars: |
+            ABC=123
+            XYZ=456
+        required: false
+        default: ""
+        type: string
+      refs-order:
+        description: |
+          The order in which refs should appear in the drop-down list. Versions not in the vector
+          will appear below refs listed here.
+          If docs have never been generated for the ref, the ref will not appear in the
+          drop-down. Similarly, if docs have been generated for the ref, but the ref is not
+          listed in the vector, it will not appear in the drop-down.
+        required: false
+        default: c("devel", "pre-release", "main", "latest-tag")
+        type: string
+      default-landing-page:
+        description:
+          The default branch or tag on gh-pages that corresponds to the landing page.
+          For instance, if your root index page on gh-pages is built using the 'main'
+          branch, then the root page of the website will correspond to this page.
+          If 'latest-tag' is selected, then the latest version will become the default.
+        required: false
+        default: main
+        type: string
+      sd-direction:
+        description: The direction to use to install staged dependencies. Choose between 'upstream', 'downstream' and 'all'
+        required: false
+        type: string
+        default: upstream
+      # If you provide latest-tag-alt-name and/or release-candidate-alt-name inputs
+      # to this workflow in some repo, you should also provide these inputs in
+      # R CMD check and Coverage workflows in order to make the unit test report
+      # and coverage report available in pkgdown documentation for the alt-names.
+      # Additionally, branches-or-tags-to-list input should be overridden with
+      # the additional alt-name inputs.
+      latest-tag-alt-name:
+        description: An alternate name for the 'latest-tag' documentation item
+        required: false
+        type: string
+        default: ''
+      release-candidate-alt-name:
+        description: An alternate name for the 'release-candidate' documentation item
+        required: false
+        type: string
+        default: ''
+      branches-or-tags-to-list:
+        description:
+          Which branches or tags should be listed under the
+          'Versions' dropdown menu on the landing page?
+          This input should be a regular expression in R.
+        required: false
+        type: string
+        default: >-
+          ^main$|^devel$|^pre-release$|^latest-tag$|^release-candidate$|^develop$|^v([0-9]+\\.)?([0-9]+\\.)?([0-9]+)|^v([0-9]+\\.)?([0-9]+\\.)?([0-9]+)(-rc[0-9]+)$
+      package-subdirectory:
+        description: Subdirectory in the repository, where the R package is located.
+        required: false
+        type: string
+        default: "."
+
+concurrency:
+  group: docs-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs:
+    name: Generate 🐣
+    runs-on: ubuntu-latest
+    if: >
+      !contains(github.event.commits[0].message, '[skip docs]')
+        && github.event.pull_request.draft == false
+    container:
+      image: ghcr.io/insightsengineering/rstudio:latest
+    # Only one job can publish to gh-pages branch concurrently.
+    concurrency:
+      group: ghpages
+    steps:
+      - name: Setup token 🔑
+        id: github-token
+        run: |
+          if [ "${{ secrets.REPO_GITHUB_TOKEN }}" == "" ]; then
+            echo "REPO_GITHUB_TOKEN is empty. Substituting it with GITHUB_TOKEN."
+            echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+          else
+            echo "Using REPO_GITHUB_TOKEN."
+            echo "token=${{ secrets.REPO_GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      - name: Get branch names 🌿
+        id: branch-name
+        uses: tj-actions/branch-names@v6
+
+      - name: Get current branch or tag 🏷️
+        id: current-branch-or-tag
+        run: |
+          if [ "${{ steps.branch-name.outputs.is_tag }}" == "true" ]; then
+            echo "Current tag: ${{ steps.branch-name.outputs.tag }}"
+            echo "ref-name=${{ steps.branch-name.outputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "Current branch: ${{ steps.branch-name.outputs.current_branch }}"
+            echo "ref-name=${{ steps.branch-name.outputs.current_branch }}" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      - name: Checkout repo (PR) 🛎
+        uses: actions/checkout@v3
+        if: github.event_name == 'pull_request'
+        with:
+          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          path: ${{ github.event.repository.name }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Checkout repo 🛎
+        uses: actions/checkout@v3
+        if: github.event_name != 'pull_request'
+        with:
+          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          path: ${{ github.event.repository.name }}
+
+      - name: Restore SD cache 💰
+        uses: actions/cache@v3
+        with:
+          key: sd-${{ runner.os }}-${{ github.event.repository.name }}
+          path: ~/.staged.dependencies
+
+      - name: Run Staged dependencies 🎦
+        uses: insightsengineering/staged-dependencies-action@v1
+        env:
+          GITHUB_PAT: ${{ steps.github-token.outputs.token }}
+        with:
+          path: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
+          enable-check: ${{ inputs.enable-staged-dependencies-check }}
+          run-system-dependencies: ${{ inputs.install-system-dependencies }}
+          direction: ${{ inputs.sd-direction }}
+
+      - name: Install R package 🚧
+        run: |
+          if (file.exists("renv.lock")) renv::restore()
+          install.packages(".", repos=NULL, type="source")
+        shell: Rscript {0}
+        working-directory: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
+
+      - name: Build docs 🏗
+        if: >
+          github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/v')
+            || github.event_name == 'push'
+        run: |
+          repo="${{ github.event.repository.name }}"
+          if [ "${{ inputs.additional-env-vars }}" != "" ]
+          then {
+            echo -e "${{ inputs.additional-env-vars }}" > /tmp/dotenv.env
+            export $(tr '\n' ' ' < /tmp/dotenv.env)
+          }
+          fi
+          Rscript - <<EOF 2>&1 | tee pkgdown_${repo}.log
+          if (file.exists("renv.lock")) renv::restore()
+          pkgdown::build_site(devel = TRUE)
+          EOF
+          if [ "${{ inputs.fail-pkgdown-on-warnings }}" == "true" ]; then {
+            grep "Warning message" pkgdown_${repo}.log > pkgdown_warnings_${repo}.log
+            if [[ $(wc -l <pkgdown_warnings_${repo}.log) -gt 0 ]]; then {
+              echo "----------------------------------------"
+              echo "⚠ One or more warnings were generated during the pkgdown build."
+              echo "Please 🙏 fix the warnings shown above 👆"
+              exit 1
+            }
+            fi
+          }
+          fi
+        shell: bash
+        working-directory: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
+
+      - name: Checkout gh-pages 🛎
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'push'
+        uses: actions/checkout@v3
+        with:
+          path: "gh-pages"
+          fetch-depth: 0
+          ref: "gh-pages"
+
+      - name: Upload docs to gh-pages 📙
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'push'
+        run: |
+          GH_PAGES_DIR="gh-pages/${{ steps.current-branch-or-tag.outputs.ref-name }}"
+          mkdir -p $GH_PAGES_DIR
+          ls -l $GH_PAGES_DIR
+          # Remove contents except coverage-report and unit-test-report directories.
+          find $GH_PAGES_DIR -mindepth 1 -maxdepth 1 \
+            ! -name coverage-report ! -name unit-test-report -exec rm -rf {} +
+          ls -l $GH_PAGES_DIR
+          # Copy generated pkgdown documentation to gh-pages branch.
+          cp -a ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}/docs/. $GH_PAGES_DIR
+          ls -l $GH_PAGES_DIR
+          cd gh-pages
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config pull.rebase false
+          git status
+          git pull origin gh-pages || true
+          git add -f .
+          git commit -m "Update pkgdown documentation ${{ github.sha }}" || true
+          git push origin gh-pages
+        shell: bash
+
+      - name: Create documentation artifact 📂
+        if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/v')
+        run: |
+          pushd ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}/docs/
+          zip -r9 $OLDPWD/pkgdown.zip *
+          popd
+        shell: bash
+
+      - name: Upload docs for review ⬆
+        if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v3
+        with:
+          name: pkgdown.zip
+          path: pkgdown.zip
+
+  multi-version-docs:
+    name: Multi-version docs 📑
+    needs: docs
+    runs-on: ubuntu-latest
+    # Only one job can publish to gh-pages branch concurrently.
+    concurrency:
+      group: ghpages
+    if: >
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        && !contains(github.event.commits[0].message, '[skip docs]')
+    steps:
+      - name: Checkout repo 🛎
+        uses: actions/checkout@v3
+        with:
+          path: ${{ github.event.repository.name }}
+          ref: "gh-pages"
+
+      - name: Create and publish docs ↗️
+        uses: insightsengineering/r-pkgdown-multiversion@v2
+        with:
+          path: ${{ github.event.repository.name }}
+          default-landing-page: ${{ inputs.default-landing-page }}
+          refs-order: ${{ inputs.refs-order }}
+          latest-tag-alt-name: ${{ inputs.latest-tag-alt-name }}
+          release-candidate-alt-name: ${{ inputs.release-candidate-alt-name }}
+          branches-or-tags-to-list: ${{ inputs.branches-or-tags-to-list }}
+
+  upload-release-assets:
+    name: Upload documentation assets 🔼
+    needs: docs
+    runs-on: ubuntu-latest
+    if: >
+      startsWith(github.ref, 'refs/tags/v')
+        && !contains(github.event.commits[0].message, '[skip docs]')
+    steps:
+      - name: Checkout repo 🛎
+        uses: actions/checkout@v3
+
+      - name: Download artifact ⏬
+        uses: actions/download-artifact@v3
+        with:
+          name: pkgdown.zip
+
+      - name: Check if release exists
+        id: check-if-release-exists
+        uses: insightsengineering/release-existence-action@v1
+
+      - name: Upload binaries to release ⤴
+        if: >-
+          steps.check-if-release-exists.outputs.release-exists == 'true'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: pkgdown.zip
+          asset_name: pkgdown.zip
+          tag: ${{ github.ref }}
+          overwrite: true
