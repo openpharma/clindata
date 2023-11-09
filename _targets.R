@@ -9,7 +9,7 @@ tar_option_set(
 )
 
 pipelines_path <- here::here('data-raw/pipelines')
-pipelines_files <- list.files(pipelines_path,pattern = 'R$',full.names = TRUE)
+pipelines_files <- list.files(pipelines_path,pattern = 'R$',full.names = TRUE, recursive = TRUE)
 
 purrr::walk(pipelines_files, source)
 
