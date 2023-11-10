@@ -1,5 +1,3 @@
-# bcva_data ----
-
 #' Example Data on BCVA
 #'
 #' @description `r lifecycle::badge("experimental")`
@@ -18,4 +16,5 @@
 #'   - `BCVA_CHG`: Change in BCVA at study visits.
 #'
 #' @source This is an artificial dataset.
-"bcva_data"
+#' @name bcva_data
+NULL

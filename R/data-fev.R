@@ -1,5 +1,3 @@
-# fev_data ----
-
 #' Example Data on FEV1
 #'
 #' @description `r lifecycle::badge("experimental")`
@@ -19,4 +17,5 @@
 #'   - `WEIGHT`: weighting variable.
 #'
 #' @source This is an artificial dataset.
-"fev_data"
+#' @name fev_data
+NULL
