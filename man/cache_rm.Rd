@@ -23,8 +23,8 @@ Clear file(s) from the cache path.
   cache_init()
 
   # populate the cache
-  cache_data('fev_data')
-  cache_data('cars')
+  cache_data("fev_data")
+  cache_data("cars")
 
   # list files in the cache
   cache_ls()
@@ -34,9 +34,9 @@ Clear file(s) from the cache path.
   cache_ls()
 
  # remove a single file based on a pattern
-  cache_data('fev_data')
-  cache_data('cars')
-  cache_rm(cache_ls(pattern = 'fev', full.names = TRUE))
+  cache_data("fev_data")
+  cache_data("cars")
+  cache_rm(cache_ls(pattern = "fev", full.names = TRUE))
   cache_ls()
 
  # cleanup

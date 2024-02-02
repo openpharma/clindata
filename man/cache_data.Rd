@@ -10,7 +10,7 @@ cache_data(data, filetype = "rds")
 \item{data}{character, name of the object to store}
 
 \item{filetype}{character, extension of the
-filetype to save the data. Default: 'rds'}
+filetype to save the data. Default: "rds"}
 }
 \description{
 Store data in the cache
@@ -23,7 +23,7 @@ Currently only rds is supported
   cache_init()
 
   # populate the cache
-  cache_data('fev_data')
+  cache_data("fev_data")
   cache_ls()
 
   # cleanup

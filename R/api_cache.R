@@ -4,6 +4,11 @@
 #' @param \dots arguments passed to [list.files][base::list.files]
 #' @param verbose logical, show message on success of [cache_destroy][cache_destroy]
 #' @return character
+#' @details
+#'   If the environment variable CLINDATA_CACHE_DIR is set then [cache_dir][cache_dir] will use the value.
+#'
+#'   If the environment variable CLINDATA_CACHE_DIR is not set then [cache_dir][cache_dir] will
+#'   default to the internal mechanism via [R_user_dir][tools::R_user_dir].
 #' @examples
 #'  cache_dir()
 #'  cache_init()
@@ -11,7 +16,7 @@
 #'  cache_destroy()
 #' @rdname cache_api
 #' @export
-cache_init <- function(path = cache_dir()){
+cache_init <- function(path = cache_dir()) {
 
   dir.create(path = path, recursive = TRUE, showWarnings = FALSE)
 
@@ -19,7 +24,7 @@ cache_init <- function(path = cache_dir()){
 
 #' @rdname cache_api
 #' @export
-cache_ls <- function(path = cache_dir(), ...){
+cache_ls <- function(path = cache_dir(), ...) {
 
   list.files(path = path, ...)
 
@@ -28,11 +33,13 @@ cache_ls <- function(path = cache_dir(), ...){
 #' @rdname cache_api
 #' @export
 #' @importFrom tools R_user_dir
-cache_dir <- function(){
+cache_dir <- function() {
+  if(nzchar(Sys.getenv("CLINDATA_CACHE_DIR")))
+    return(Sys.getenv("CLINDATA_CACHE_DIR"))
 
   tools::R_user_dir(
-    package = 'clindata', 
-    which = 'cache'
+    package = "clindata",
+    which = "cache"
   )
 
 }
@@ -49,8 +56,8 @@ cache_dir <- function(){
 #'   cache_init()
 #'
 #'   # populate the cache
-#'   cache_data('fev_data')
-#'   cache_data('cars')
+#'   cache_data("fev_data")
+#'   cache_data("cars")
 #'
 #'   # list files in the cache
 #'   cache_ls()
@@ -60,9 +67,9 @@ cache_dir <- function(){
 #'   cache_ls()
 #'
 #'  # remove a single file based on a pattern
-#'   cache_data('fev_data')
-#'   cache_data('cars')
-#'   cache_rm(cache_ls(pattern = 'fev', full.names = TRUE))
+#'   cache_data("fev_data")
+#'   cache_data("cars")
+#'   cache_rm(cache_ls(pattern = "fev", full.names = TRUE))
 #'   cache_ls()
 #'
 #'  # cleanup
@@ -72,20 +79,20 @@ cache_dir <- function(){
 cache_rm <- function(
     files = cache_ls(full.names = TRUE),
     recursive = FALSE,
-    force = FALSE){
+    force = FALSE) {
 
   invisible(
     lapply(files,
-      function(f){
-        unlink(x = f, recursive = recursive, force = force)
-      })
+           function(f) {
+             unlink(x = f, recursive = recursive, force = force)
+           })
   )
 }
 
 #' @rdname cache_api
 #' @export
-cache_destroy <- function(path = cache_dir(), verbose = TRUE){
+cache_destroy <- function(path = cache_dir(), verbose = TRUE) {
   unlink(path, recursive = TRUE, force = TRUE)
-  if(verbose)
-    message(path, ' directory removed')
+  if (verbose)
+    message(path, " directory removed")
 }

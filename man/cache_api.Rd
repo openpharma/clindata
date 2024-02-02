@@ -28,6 +28,12 @@ character
 \description{
 Functions to manage cache data across sessions.
 }
+\details{
+If the environment variable CLINDATA_CACHE_DIR is set then \link{cache_dir} will use the value.
+
+If the environment variable CLINDATA_CACHE_DIR is not set then \link{cache_dir} will
+default to the internal mechanism via \link[tools:userdir]{R_user_dir}.
+}
 \examples{
  cache_dir()
  cache_init()

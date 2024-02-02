@@ -9,7 +9,7 @@ read_data(data, filetype = "rds", use_cache = FALSE)
 \arguments{
 \item{data}{character, name of data object}
 
-\item{filetype}{character, extension type of the data. Default: 'rds'}
+\item{filetype}{character, extension type of the data. Default: "rds"}
 
 \item{use_cache}{boolean, use the data stored in cache? Default: FALSE}
 }
@@ -23,6 +23,6 @@ Read data directly into a global environment
 Currently only loading of rds files is supported
 }
 \examples{
- read_data('fev_data')
- read_data('bcva_data')
+ read_data("fev_data")
+ read_data("bcva_data")
 }

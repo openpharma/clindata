@@ -20,5 +20,5 @@ Load data directly into an enivornment
 By default the data is loaded into the parent frame from which it is called.
 }
 \examples{
- load_data('fev_data')
+ load_data("fev_data")
 }
