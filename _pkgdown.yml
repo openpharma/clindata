@@ -1,4 +1,4 @@
-url: https://insightsengineering.github.io/r.pkg.template
+url: https://openpharma.github.io/clindata
 
 template:
   bootstrap: 5
@@ -17,4 +17,4 @@ template:
 navbar:
   right:
     - icon: fa-github
-      href: https://github.com/insightsengineering/r.pkg.template
+      href: https://github.com/openpharma/clindata

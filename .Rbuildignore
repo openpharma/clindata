@@ -19,3 +19,4 @@ workflows.md
 images
 _targets.R
 ^README\.Rmd$
+^data-raw$

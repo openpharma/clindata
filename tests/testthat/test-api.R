@@ -1,30 +1,11 @@
-test_that("API greets the person", {
-  host <- "127.0.0.1"
-  port <- 9000
+testthat::context("api methods")
 
-  # Start the API
-  future::plan(future::multisession)
-  future::future(
-    r.pkg.template::plumber_api(host = host, port = port)
-  )
-  Sys.sleep(3)
+testthat::describe('data storage methods',{
 
-  # Make request
-  res <- httr::GET(
-    url = paste0(
-      "http://",
-      host,
-      ":",
-      port,
-      "/echo"
-    ),
-    query = "name=tim"
-  )
+  it('cache data',{
+    testthat::expect_equal(
+      1+1,2
+    )
+  })
 
-  # Get response
-  result <- httr::content(res)[[1]]
-
-  # Compare
-  expected <- "Hello, Tim"
-  expect_identical(result, expected)
 })

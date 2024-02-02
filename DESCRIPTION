@@ -3,22 +3,20 @@ Package: clindata
 Title: Open Clinical Data
 Version: 0.0.1
 Date: 2023-11-09
-Authors@R: person("Jonathan","Sidi" , ,
-        "yoni@pinpointstrategies.io", role = c("aut", "cre"))
-Description: Open clinical data for packages
+Authors@R: person("Jonathan","Sidi" , , "yoni@pinpointstrategies.io", role = c("aut", "cre"))
+Description: Open clinical data for openpharma packages.
 License: Apache License 2.0 | file LICENSE
 URL: https://github.com/openpharma/clindata
 BugReports: https://github.com/openpharma/clindata/issues
-Depends:
-    R (>= 4.0)
-Suggests:
+Depends: R (>= 4.0)
+Imports: tools, utils
+Suggests: 
     knitr,
-    testthat (>= 2.0)
-VignetteBuilder:
-    knitr
-biocViews:
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Config/testthat/edition: 3
