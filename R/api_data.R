@@ -110,3 +110,8 @@ list_data <- function() {
   utils::data(package = "clindata")[["results"]][, "Item"]
 
 }
+
+test_data <- function(data) {
+  f <- system.file(file.path("benchmark", sprintf("%s.rds", data)), package = "clindata")
+  readRDS(f)
+}

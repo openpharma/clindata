@@ -31,7 +31,7 @@ testthat::describe("caching logic", {
   })
 
   testthat::describe("add data to cache", {
-    it("add data from package",{
+    it("add data from package", {
       cache_init()
       load_data("fev_data")
       cache_data("fev_data")
