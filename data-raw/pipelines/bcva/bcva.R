@@ -1,10 +1,11 @@
-source(here::here('data-raw/pipelines/bcva/bcva-helpers.R'))
+source(here::here("data-raw/pipelines/bcva/bcva-helpers.R"))
+source(here::here("data-raw/pipelines/helpers.R"))
 
 # BCVA data-generating process.
 
 pipe_bcva <- list(
   # Define Scenario for Example Data.
-  tar_target(scenario,{
+  tar_target(bcva_scenario, {
     tibble::tibble(
       n_obs = 1000,
       trt_coef = 0.25,
@@ -14,27 +15,30 @@ pipe_bcva <- list(
     )
   }),
   # Generate Covariate Matrix
-  tar_target(outcome_covar_mat, compute_unstructured_matrix()),
+  tar_target(bcva_outcome_covar_mat, compute_unstructured_matrix()),
   # Generate the covariates.
-  tar_target(covars_tbl,{
-    generate_covariates(
-      n_obs = scenario$n_obs,
-      n_visits = nrow(outcome_covar_mat)
+  tar_target(bcva_covars_tbl, {
+    bcva_generate_covariates(
+      n_obs = bcva_scenario$n_obs,
+      n_visits = nrow(bcva_outcome_covar_mat)
     )
   }),
   # Generate the outcomes.
-  tar_target(bcva_outcomes,{
+  tar_target(bcva_outcomes, {
     generate_outcomes(
-      covars_df = covars_tbl,
-      cov_mat = outcome_covar_mat,
-      trt_coef = scenario$trt_coef,
-      visit_coef = scenario$visit_coef,
-      trt_visit_coef = scenario$trt_visit_coef
+      model_mat = bcva_model_mat(bcva_covars_tbl),
+      cov_mat = bcva_outcome_covar_mat,
+      effect_coefs = bcva_coefs(
+        trt_coef = bcva_scenario$trt_coef,
+        visit_coef = bcva_scenario$visit_coef,
+        trt_visit_coef = bcva_scenario$trt_visit_coef
+      ),
+      effect_var = bcva_coefs_var()
     )
   }),
   # Assemble into a tibble.
-  tar_target(bcva_tbl,{
-    covars_tbl |>
+  tar_target(bcva_tbl, {
+    bcva_covars_tbl |>
       dplyr::select(
         participant, base_bcva, strata, trt, visit_num
       ) |>
@@ -43,12 +47,12 @@ pipe_bcva <- list(
       )
   }),
   # Delete observations at random.
-  tar_target(bcva_tbl_mising,{
-    missing_at_random(bcva_tbl, type = scenario$missing_type)
+  tar_target(bcva_tbl_missing, {
+    mar(bcva_tbl, type = bcva_scenario$missing_type, bcva_lin_pred)
   }),
   # Format to resemble FEV dataset.
-  tar_target(bcva_data,{
-    bcva_tbl_mising |>
+  tar_target(bcva_data, {
+    bcva_tbl_missing |>
       dplyr::transmute(
         USUBJID = factor(participant),
         VISITN = visit_num,
@@ -65,7 +69,7 @@ pipe_bcva <- list(
         BCVA_CHG = bcva_change
       )
   }),
-  tar_target(bcva_deploy,{
+  tar_target(bcva_deploy, {
     usethis::use_data(bcva_data, overwrite = TRUE)
   })
 )
