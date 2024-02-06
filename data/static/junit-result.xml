@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="api" timestamp="2024-02-06T14:18:58Z" hostname="059281d755df" tests="4" skipped="0" failures="0" errors="0" time="0.158">
-    <testcase time="0.068" classname="api" name="caching_initialization_initialize_cache_default"/>
-    <testcase time="0.065" classname="api" name="caching_initialization_initialize_cache_system_variable"/>
+  <testsuite name="api" timestamp="2024-02-06T14:41:19Z" hostname="9cc3028fe350" tests="4" skipped="0" failures="0" errors="0" time="0.152">
+    <testcase time="0.064" classname="api" name="caching_initialization_initialize_cache_default"/>
+    <testcase time="0.064" classname="api" name="caching_initialization_initialize_cache_system_variable"/>
     <testcase time="0.012" classname="api" name="caching_initialization_initialize_cache_user_path"/>
-    <testcase time="0.013" classname="api" name="add_data_to_cache_add_data_from_package"/>
+    <testcase time="0.012" classname="api" name="add_data_to_cache_add_data_from_package"/>
   </testsuite>
 </testsuites>
