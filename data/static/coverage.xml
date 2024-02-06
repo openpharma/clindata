@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="1" branch-rate="0" lines-covered="49" lines-valid="49" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-02-06 15:50:20.49361">
+<coverage line-rate="1" branch-rate="0" lines-covered="49" lines-valid="49" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-02-06 15:54:41.269643">
   <sources>
     <source>/__w/clindata/clindata/clindata</source>
   </sources>
