@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="api" timestamp="2024-02-06T14:06:28Z" hostname="1e8b5de19a5b" tests="4" skipped="0" failures="0" errors="0" time="0.15">
-    <testcase time="0.064" classname="api" name="caching_initialization_initialize_cache_default"/>
-    <testcase time="0.062" classname="api" name="caching_initialization_initialize_cache_system_variable"/>
+  <testsuite name="api" timestamp="2024-02-06T14:08:47Z" hostname="6ee847793ab8" tests="4" skipped="0" failures="0" errors="0" time="0.148">
+    <testcase time="0.063" classname="api" name="caching_initialization_initialize_cache_default"/>
+    <testcase time="0.061" classname="api" name="caching_initialization_initialize_cache_system_variable"/>
     <testcase time="0.012" classname="api" name="caching_initialization_initialize_cache_user_path"/>
     <testcase time="0.012" classname="api" name="add_data_to_cache_add_data_from_package"/>
   </testsuite>
