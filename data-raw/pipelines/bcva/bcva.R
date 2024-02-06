@@ -50,7 +50,7 @@ pipe_bcva <- list(
   tar_target(bcva_tbl_missing, {
     mar(bcva_tbl, type = bcva_scenario$missing_type, bcva_lin_pred)
   }),
-  # Format to resemble FEV dataset.
+  # Format to resemble BCVA dataset.
   tar_target(bcva_data, {
     bcva_tbl_missing |>
       dplyr::transmute(
