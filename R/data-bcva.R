@@ -1,4 +1,4 @@
-#' Example Data on BCVA
+#' Simulated BCVA Data
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'

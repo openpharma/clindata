@@ -2,7 +2,7 @@
 % Please edit documentation in R/data-bcva.R
 \name{bcva_data}
 \alias{bcva_data}
-\title{Example Data on BCVA}
+\title{Simulated BCVA Data}
 \format{
 A \code{tibble} with 10,000 rows and 7 variables:
 \itemize{

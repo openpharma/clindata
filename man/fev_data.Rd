@@ -2,7 +2,7 @@
 % Please edit documentation in R/data-fev.R
 \name{fev_data}
 \alias{fev_data}
-\title{Example Data on FEV1}
+\title{Simulated FEV1 Data}
 \format{
 A \code{tibble} with 800 rows and 7 variables:
 \itemize{

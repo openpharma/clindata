@@ -1,4 +1,4 @@
-#' Example Data on FEV1
+#' Simulated FEV1 Data
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
