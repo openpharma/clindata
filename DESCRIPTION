@@ -12,6 +12,7 @@ Depends: R (>= 4.0)
 Imports: tools, utils
 Suggests: 
     knitr,
+    withr,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Encoding: UTF-8

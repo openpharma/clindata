@@ -25,7 +25,7 @@ read_data <- function(data, filetype = "rds", use_cache = FALSE) {
           data_out <- readRDS(data_path)
         }
       }else{
-        message(sprintf("%s not in cache", data))
+        stop(sprintf("%s not in cache", data))
       }
     }
   }else{
@@ -81,6 +81,8 @@ load_data <- function(data, env = parent.frame(), ...) {
 #' @rdname cache_data
 #' @export
 cache_data <- function(data, filetype = "rds") {
+  cl <- match.call()
+  data_name <- as.character(cl[[2]])
 
   cache_dir <- cache_dir()
 
@@ -90,8 +92,8 @@ cache_data <- function(data, filetype = "rds") {
 
   if(filetype == "rds") {
     saveRDS(
-      object = read_data(data), 
-      file = file.path(cache_dir, sprintf("%s.%s", data, filetype))
+      object = data,
+      file = file.path(cache_dir, sprintf("%s.%s", data_name, filetype))
     )
   }
 

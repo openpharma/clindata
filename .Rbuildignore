@@ -17,6 +17,7 @@ coverage.*
 init.sh
 workflows.md
 images
-_targets.R
+^\_targets\.R$
+^\_targets$
 ^README\.Rmd$
 ^data-raw$
