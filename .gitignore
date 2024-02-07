@@ -31,6 +31,6 @@ coverage.*
 node_modules/
 package-lock.json
 package.json
-_targets
+data-raw/_targets
 data-raw/mmrm_review.R
 

@@ -16,11 +16,11 @@ cache_dir()
 cache_destroy(path = cache_dir(), verbose = TRUE)
 }
 \arguments{
-\item{path}{character, path to cache directory, Default: cache_dir()}
+\item{path}{character, path to cache directory, Default: \code{cache_dir()}}
 
-\item{\dots}{arguments passed to \link[base:list.files]{list.files}}
+\item{\dots}{arguments passed to \code{\link[=list.files]{list.files()}}}
 
-\item{verbose}{logical, show message on success of \link{cache_destroy}}
+\item{verbose}{logical, show message on success of \code{\link[=cache_destroy]{cache_destroy()}}}
 }
 \value{
 character
@@ -29,9 +29,9 @@ character
 Functions to manage cache data across sessions.
 }
 \details{
-If the environment variable CLINDATA_CACHE_DIR is set then \link{cache_dir} will use the value.
+If the environment variable CLINDATA_CACHE_DIR is set then \code{\link[=cache_dir]{cache_dir()}} will use the value.
 
-If the environment variable CLINDATA_CACHE_DIR is not set then \link{cache_dir} will
+If the environment variable CLINDATA_CACHE_DIR is not set then \code{\link[=cache_dir]{cache_dir()}} will
 default to the internal mechanism via \link[tools:userdir]{R_user_dir}.
 }
 \examples{

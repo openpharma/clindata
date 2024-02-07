@@ -14,4 +14,4 @@ pipelines_files <- pipelines_files[!grepl("helpers", pipelines_files)]
 purrr::walk(pipelines_files, source)
 
 tar_option_set(seed = 510)
-pipe_bcva
+list(pipe_bcva, pipe_fev)

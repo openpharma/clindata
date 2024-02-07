@@ -4,7 +4,7 @@ Title: Open Clinical Data
 Version: 0.0.1
 Date: 2023-11-09
 Authors@R: person("Jonathan","Sidi" , , "yoni@pinpointstrategies.io", role = c("aut", "cre"))
-Description: Open clinical data for openpharma packages.
+Description: Reproducible simulated clinical trials for use in R packages.
 License: Apache License 2.0 | file LICENSE
 URL: https://github.com/openpharma/clindata
 BugReports: https://github.com/openpharma/clindata/issues

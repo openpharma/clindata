@@ -1,13 +1,13 @@
 #' @title Data Caching API
 #' @description Functions to manage cache data across sessions.
-#' @param path character, path to cache directory, Default: cache_dir()
-#' @param \dots arguments passed to [list.files][base::list.files]
-#' @param verbose logical, show message on success of [cache_destroy][cache_destroy]
+#' @param path character, path to cache directory, Default: `cache_dir()`
+#' @param \dots arguments passed to [list.files()]
+#' @param verbose logical, show message on success of [cache_destroy()]
 #' @return character
 #' @details
-#'   If the environment variable CLINDATA_CACHE_DIR is set then [cache_dir][cache_dir] will use the value.
+#'   If the environment variable CLINDATA_CACHE_DIR is set then [cache_dir()] will use the value.
 #'
-#'   If the environment variable CLINDATA_CACHE_DIR is not set then [cache_dir][cache_dir] will
+#'   If the environment variable CLINDATA_CACHE_DIR is not set then [cache_dir()] will
 #'   default to the internal mechanism via [R_user_dir][tools::R_user_dir].
 #' @examples
 #'  cache_dir()
@@ -32,9 +32,8 @@ cache_ls <- function(path = cache_dir(), ...) {
 
 #' @rdname cache_api
 #' @export
-#' @importFrom tools R_user_dir
 cache_dir <- function() {
-  if(nzchar(Sys.getenv("CLINDATA_CACHE_DIR")))
+  if (nzchar(Sys.getenv("CLINDATA_CACHE_DIR")))
     return(Sys.getenv("CLINDATA_CACHE_DIR"))
 
   tools::R_user_dir(
@@ -51,6 +50,7 @@ cache_dir <- function() {
 #' @param recursive boolean. Should directories be deleted recursively?
 #' @param force boolean. Should permissions be changed (if possible) to
 #'   allow the file or directory to be removed?
+#' @return NULL
 #' @examples
 #'   # initialize the cache directory
 #'   cache_init()
@@ -74,7 +74,6 @@ cache_dir <- function() {
 #'
 #'  # cleanup
 #'   cache_destroy()
-#' @rdname cache_rm
 #' @export
 cache_rm <- function(
     files = cache_ls(full.names = TRUE),

@@ -3,7 +3,7 @@
 #' @param data character, name of data object
 #' @param filetype character, extension type of the data. Default: "rds"
 #' @param use_cache boolean, use the data stored in cache? Default: FALSE
-#' @return data.frame
+#' @return data stored in either the local cache directory or within the package.
 #' @details
 #'   Currently only loading of rds files is supported
 #' @examples
@@ -11,7 +11,6 @@
 #'  read_data("bcva_data")
 #' @rdname data_api
 #' @export
-#' @importFrom tools file_path_sans_ext
 read_data <- function(data, filetype = "rds", use_cache = FALSE) {
 
   if(use_cache) {
@@ -24,7 +23,7 @@ read_data <- function(data, filetype = "rds", use_cache = FALSE) {
         if(filetype == "rds"){
           data_out <- readRDS(data_path)
         }
-      }else{
+      } else {
         stop(sprintf("%s not in cache", data))
       }
     }
@@ -105,7 +104,6 @@ cache_data <- function(data, filetype = "rds") {
 #' @examples
 #'  list_data()
 #' @rdname list_data
-#' @importFrom utils data
 #' @export
 list_data <- function() {
 

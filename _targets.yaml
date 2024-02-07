@@ -1,0 +1,3 @@
+main:
+  script: data-raw/_targets.R
+  store: data-raw/_targets

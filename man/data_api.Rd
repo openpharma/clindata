@@ -14,7 +14,7 @@ read_data(data, filetype = "rds", use_cache = FALSE)
 \item{use_cache}{boolean, use the data stored in cache? Default: FALSE}
 }
 \value{
-data.frame
+data stored in either the local cache directory or within the package.
 }
 \description{
 Read data directly into a global environment
