@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="api" timestamp="2024-02-07T14:17:06Z" hostname="c1543c2ad8d1" tests="7" skipped="0" failures="0" errors="0" time="0.183">
-    <testcase time="0.073" classname="api" name="caching_initialization_initialize_cache_default"/>
-    <testcase time="0.062" classname="api" name="caching_initialization_initialize_cache_system_variable"/>
-    <testcase time="0.012" classname="api" name="caching_initialization_initialize_cache_user_path"/>
-    <testcase time="0.00700000000000001" classname="api" name="add_data_to_cache_add_data_from_package"/>
+  <testsuite name="api" timestamp="2024-02-07T14:48:11Z" hostname="8a020ad25c93" tests="7" skipped="0" failures="0" errors="0" time="0.186">
+    <testcase time="0.075" classname="api" name="caching_initialization_initialize_cache_default"/>
+    <testcase time="0.063" classname="api" name="caching_initialization_initialize_cache_system_variable"/>
+    <testcase time="0.011" classname="api" name="caching_initialization_initialize_cache_user_path"/>
+    <testcase time="0.00800000000000001" classname="api" name="add_data_to_cache_add_data_from_package"/>
     <testcase time="0.00900000000000001" classname="api" name="add_data_to_cache_add_data_from_environment"/>
     <testcase time="0.00699999999999995" classname="api" name="remove_data_from_cache_remove_data_from_cache"/>
     <testcase time="0.013" classname="api" name="remove_data_from_cache_verbose_message_on_destroy"/>
   </testsuite>
-  <testsuite name="data" timestamp="2024-02-07T14:17:07Z" hostname="c1543c2ad8d1" tests="4" skipped="0" failures="0" errors="0" time="0.048">
-    <testcase time="0.024" classname="data" name="read_data_from_cache_read_existing_data"/>
+  <testsuite name="data" timestamp="2024-02-07T14:48:11Z" hostname="8a020ad25c93" tests="4" skipped="0" failures="0" errors="0" time="0.049">
+    <testcase time="0.025" classname="data" name="read_data_from_cache_read_existing_data"/>
     <testcase time="0.01" classname="data" name="read_data_from_cache_error_on_missing_data"/>
-    <testcase time="0.00700000000000001" classname="data" name="stored_data_count_internal_simulated_data"/>
-    <testcase time="0.00700000000000001" classname="data" name="stored_data_benchmark_data"/>
+    <testcase time="0.00600000000000001" classname="data" name="stored_data_count_internal_simulated_data"/>
+    <testcase time="0.00800000000000001" classname="data" name="stored_data_benchmark_data"/>
   </testsuite>
 </testsuites>
