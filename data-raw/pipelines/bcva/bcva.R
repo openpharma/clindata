@@ -1,5 +1,4 @@
 source(here::here("data-raw/pipelines/bcva/bcva-helpers.R"))
-source(here::here("data-raw/pipelines/helpers.R"))
 
 # BCVA data-generating process.
 
@@ -15,7 +14,7 @@ pipe_bcva <- list(
     )
   }),
   # Generate Covariate Matrix
-  tar_target(bcva_outcome_covar_mat, compute_unstructured_matrix()),
+  tar_target(bcva_outcome_covar_mat, clindata::compute_unstructured_matrix()),
   # Generate the covariates.
   tar_target(bcva_covars_tbl, {
     bcva_generate_covariates(
@@ -25,7 +24,7 @@ pipe_bcva <- list(
   }),
   # Generate the outcomes.
   tar_target(bcva_outcomes, {
-    generate_outcomes(
+    clindata::generate_outcomes(
       model_mat = bcva_model_mat(bcva_covars_tbl),
       cov_mat = bcva_outcome_covar_mat,
       effect_coefs = bcva_coefs(
@@ -48,7 +47,7 @@ pipe_bcva <- list(
   }),
   # Delete observations at random.
   tar_target(bcva_tbl_missing, {
-    mar(bcva_tbl, type = bcva_scenario$missing_type, bcva_lin_pred)
+    clindata::mar(bcva_tbl, type = bcva_scenario$missing_type, bcva_lin_pred)
   }),
   # Format to resemble BCVA dataset.
   tar_target(bcva_data, {
@@ -56,10 +55,10 @@ pipe_bcva <- list(
       dplyr::transmute(
         USUBJID = factor(participant),
         VISITN = visit_num,
-        AVISIT = paste0("VIS", pad_number(visit_num)),
+        AVISIT = paste0("VIS", sprintf("%02s", visit_num)),
         AVISIT = factor(
           AVISIT,
-          levels = paste0("VIS", pad_number(seq_len(10)))
+          levels = paste0("VIS", sprintf("%02s", seq_len(10)))
         ),
         ARMCD = ifelse(trt == 1, "TRT", "CTL"),
         RACE = ifelse(strata == 1, "Black",

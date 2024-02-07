@@ -4,7 +4,7 @@ library(targets)
 # Set target options:
 tar_option_set(
   # packages that your targets need to run
-  packages = c("usethis", "tibble", "dplyr", "stats", "clusterGeneration", "MASS")
+  packages = c("usethis", "tibble", "dplyr", "stats", "clindata")
 )
 
 pipelines_path <- here::here("data-raw/pipelines")

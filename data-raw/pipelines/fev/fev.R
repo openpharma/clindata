@@ -1,4 +1,3 @@
-source(here::here('data-raw/pipelines/helpers.R'))
 source(here::here('data-raw/pipelines/fev/fev-helpers.R'))
 
 # FEV1 data-generating process.
@@ -16,7 +15,7 @@ pipe_fev <- list(
   tar_target(fev_outcome_covar_mat, {
     v11 <- rnorm(1, 40, 0.1)
     vars <- v11 * c(1, 2/3, 1/3, 5/2)
-    compute_unstructured_matrix(vars)
+    clindata::compute_unstructured_matrix(vars)
   }),
   # Generate the covariates.
   tar_target(fev_covars_tbl, {
@@ -27,7 +26,7 @@ pipe_fev <- list(
   }),
   # Generate the outcomes.
   tar_target(fev_outcomes, {
-    generate_outcomes(
+    clindata::generate_outcomes(
       model_mat = fev_model_mat(fev_covars_tbl),
       cov_mat = fev_outcome_covar_mat,
       effect_coefs = fev_coefs(trt_coef = fev_scenario$trt_coef),
@@ -43,7 +42,7 @@ pipe_fev <- list(
   }),
   # Delete observations at random.
   tar_target(fev_data, {
-    mcar(fev_tbl, "FEV1", fev_scenario$missing_percent)
+    clindata::mcar(fev_tbl, "FEV1", fev_scenario$missing_percent)
   }),
   tar_target(fev_deploy, {
     usethis::use_data(fev_data, overwrite = TRUE)

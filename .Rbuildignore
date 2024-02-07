@@ -17,7 +17,7 @@ coverage.*
 init.sh
 workflows.md
 images
-^\_targets\.R$
-^\_targets$
+^\_targets\.yaml$
 ^README\.Rmd$
 ^data-raw$
+^LICENSE\.md$
