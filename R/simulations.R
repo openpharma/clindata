@@ -11,6 +11,21 @@ compute_unstructured_matrix <- function(
   return(us_mat)
 }
 
+#' @export
+compute_ar1_matrix <- function(sigma = 20, rho = 0.6, visits = 10) {
+  this_grid <- expand.grid(row = seq(visits), col = seq(visits))
+  pow_mat <- with(this_grid, {
+    matrix(abs(row - col), visits, visits)
+  })
+
+  sigma_mat <- matrix(sigma, visits, visits)
+
+  rho_mat <- matrix(rho, visits, visits)
+
+  sigma_mat * rho_mat^pow_mat
+}
+
+
 # MCAR helper function.
 #' @export
 mcar <- function(data, col, p) {
