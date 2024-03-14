@@ -1,4 +1,4 @@
-url: https://insightsengineering.github.io/r.pkg.template
+url: https://openpharma.github.io/clindata
 
 template:
   bootstrap: 5
@@ -15,6 +15,31 @@ template:
        </script>
 
 navbar:
-  right:
-    - icon: fa-github
-      href: https://github.com/insightsengineering/r.pkg.template
+  structure:
+    left: [intro, reference, articles, news, reports]
+    right: [search, github]
+  components:
+    github:
+      icon: fa-github
+      href: https://github.com/openpharma/clindata
+
+reference:
+  - title: Package
+    contents:
+      - clindata-package
+  - title: Datasets
+    contents:
+      - fev_data
+      - bcva_data
+  - title: Caching API
+    contents:
+      - cache_init
+      - cache_data
+      - cache_ls
+      - cache_rm
+      - cache_destroy
+  - title: Data API
+    contents:
+      - read_data
+      - list_data
+      - load_data
