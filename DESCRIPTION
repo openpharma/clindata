@@ -1,31 +1,23 @@
 Type: Package
-Package: r.pkg.template
-Title: R Package Template
-Version: 0.1.0.9130
-Date: 2023-07-05
-Authors@R:
-    person("insightsengineering", , , "insightsengineering@example.com", role = c("aut", "cre"))
-Description: R package template with GitHub Actions workflows included.
-License: Apache License 2.0 | file LICENSE
-URL: https://github.com/insightsengineering/r.pkg.template/
-BugReports: https://github.com/insightsengineering/r.pkg.template/issues
-Depends:
-    R (>= 3.6)
-Imports:
-    plumber,
-    shiny,
-    stringr
-Suggests:
-    future,
-    httr,
+Package: clindata
+Title: Open Clinical Data
+Version: 0.0.1
+Date: 2023-11-09
+Authors@R: person("Jonathan","Sidi" , , "yoni@pinpointstrategies.io", role = c("aut", "cre"))
+Description: Reproducible simulated clinical trials for use in R packages.
+License: MIT + file LICENSE
+URL: https://github.com/openpharma/clindata
+BugReports: https://github.com/openpharma/clindata/issues
+Depends: R (>= 4.0)
+Imports: tools, utils, MASS, clusterGeneration
+Suggests: 
     knitr,
-    shinytest,
-    testthat (>= 2.0)
-VignetteBuilder:
-    knitr
-biocViews:
+    withr,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Config/testthat/edition: 3

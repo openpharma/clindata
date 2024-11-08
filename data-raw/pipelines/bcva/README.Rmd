@@ -1,0 +1,20 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%",
+  echo = FALSE
+)
+```
+
+```{r, results='asis'}
+withr::with_dir(rprojroot::find_root('_targets.R'),{
+cat(c("``` mermaid", targets::tar_mermaid(targets_only = TRUE), "```"), sep = "\n")
+})
+```
